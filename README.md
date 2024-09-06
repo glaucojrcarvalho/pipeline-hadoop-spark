@@ -6,7 +6,7 @@
 <p>	Nosso objetivo neste projeto é construir um Data Warehouse utilizando Hadoop e Hive, em seguida realizar uma SCD utilizando Spark. </p>
 
 ### ! IMPORTANTE: Neste experimento foram utilizadas as seguintes versões de sistema:
-##### Projeto criado em 2018 e atualizado em 2020, pode ser que algumas versões não sejam mais compatível, necessário validar.
+##### Projeto criado em 2018 e atualizado em 2020, pode ser que algumas versões não sejam mais compatíveis, necessário validar.
 - CentOS Linux 7;
 - MySQL  Ver 8.0.20;
 - Hadoop 3.2.0;

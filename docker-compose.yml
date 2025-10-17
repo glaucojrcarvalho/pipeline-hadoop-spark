@@ -48,6 +48,7 @@ services:
     image: apache/spark:latest
     container_name: spark-master
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    user: "0:0"
     environment:
       - SPARK_LOG_LEVEL=INFO
     ports:

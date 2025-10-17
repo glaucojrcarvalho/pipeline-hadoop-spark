@@ -10,7 +10,7 @@ logs:
 	docker compose logs -f --tail=200
 
 mysql-load:
-	docker exec -i mysql mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD < /docker-entrypoint-initdb.d/AWBackup.sql
+	cat data/AWBackup.sql | docker exec -i mysql mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD
 
 ingest:
 	docker exec spark-master /opt/spark/bin/spark-submit --master local[*] \

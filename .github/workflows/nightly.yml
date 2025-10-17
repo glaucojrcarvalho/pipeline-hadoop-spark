@@ -38,9 +38,9 @@ jobs:
       - name: Warm Docker image cache
         run: |
           docker pull mysql:8.0
-          docker pull bde2020/hive:3.1.3-postgresql-metastore
+          docker pull bde2020/hive:2.3.2-postgresql-metastore
           docker pull postgres:14
-          docker pull bitnami/spark:3.5
+          docker pull apache/spark:latest
 
       - name: Launch stack
         run: docker compose up -d

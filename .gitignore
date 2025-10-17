@@ -2,9 +2,11 @@
 .env
 .env.local
 
-# Data directory
-data/
+# Data directory (but allow AWBackup.sql)
+data/*
+!data/AWBackup.sql
 *.sql
+!data/AWBackup.sql
 
 # Python
 __pycache__/

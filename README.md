@@ -21,14 +21,14 @@
 
 ## Status (October 2025)
 
-✅ **Working Components:**
+**Working Components:**
 - Docker Compose infrastructure with all services
 - MySQL to Hive data ingestion via Spark JDBC
 - Complete AdventureWorks database import (67 tables)
 - Basic Spark SQL operations on Hive tables
 - CI/CD workflows with proper image versions
 
-⚠️ **Known Limitations:**
+**Known Limitations:**
 - SCD scripts use `MERGE INTO` statements which are not supported in Apache Spark 4.0
 - ACID table operations may require Hive-specific configuration
 - Nightly workflow may fail on SCD operations until MERGE statements are refactored
@@ -42,7 +42,7 @@ Place the dump under `./data/AWBackup.sql`. Example:
 
 ```bash
 mkdir -p data
-curl -L -o data/AWBackup.sql "https://raw.githubusercontent.com/glaucojrcarvalho/pipeline-hadoop-spark/refs/heads/main/AWBackup.sql"
+curl -L -o data/AWBackup.sql "https://raw.githubusercontent.com/glaucojrcarvalho/pipeline-hadoop-spark/refs/heads/main/data/AWBackup.sql"
 ```
 
 ### 2) Environment variables

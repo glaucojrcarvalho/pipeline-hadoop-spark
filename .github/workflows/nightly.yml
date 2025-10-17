@@ -1,0 +1,75 @@
+name: Nightly SCD
+
+on:
+  schedule:
+    - cron: "0 2 * * *"  # 02:00 UTC daily
+  workflow_dispatch:
+
+jobs:
+  scd-nightly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ruff (lint)
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Create data dir & fetch AW dump
+        run: |
+          mkdir -p data
+          curl -L -o data/AWBackup.sql "https://raw.githubusercontent.com/glaucojrcarvalho/pipeline-hadoop-spark/refs/heads/main/AWBackup.sql"
+
+      - name: Copy env
+        run: cp .env.example .env
+
+      - name: Warm Docker image cache
+        run: |
+          docker pull mysql:8.0
+          docker pull bde2020/hive:3.1.3-postgresql-metastore
+          docker pull postgres:14
+          docker pull bitnami/spark:3.5
+
+      - name: Launch stack
+        run: docker compose up -d
+
+      - name: Wait for services
+        run: |
+          echo "Waiting for MySQL..."
+          for i in {1..60}; do
+            if docker exec mysql mysqladmin ping -h 127.0.0.1 -uawuser -pawpass --silent; then
+              echo "MySQL is up"; break
+            fi
+            sleep 5
+          done
+          echo "Sleep for Hive to settle..."; sleep 45
+
+      - name: Load MySQL dump
+        run: make mysql-load
+
+      - name: Ingest target table(s) for SCD
+        env:
+          ONLY_TABLES: "culture"
+        run: make ingest
+
+      - name: Run SCD Type 1
+        run: make scd1
+
+      - name: Run SCD Type 2
+        run: make scd2
+
+      - name: Teardown
+        if: always()
+        run: docker compose down -v

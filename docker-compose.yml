@@ -47,8 +47,8 @@ services:
   spark-master:
     image: apache/spark:latest
     container_name: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     environment:
-      - SPARK_MODE=master
       - SPARK_LOG_LEVEL=INFO
     ports:
       - "7077:7077"
@@ -63,9 +63,8 @@ services:
   spark-worker:
     image: apache/spark:latest
     container_name: spark-worker
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
       - SPARK_LOG_LEVEL=INFO
     depends_on:
       - spark-master

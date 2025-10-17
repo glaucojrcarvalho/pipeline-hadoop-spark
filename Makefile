@@ -10,7 +10,7 @@ logs:
 	docker compose logs -f --tail=200
 
 mysql-load:
-	cat data/AWBackup.sql | docker exec -i mysql mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD adventureworks
+	cat data/AWBackup.sql | docker exec -i mysql mysql -uawuser -pawpass adventureworks
 
 ingest:
 	docker exec spark-master /opt/spark/bin/spark-submit --master local[*] \

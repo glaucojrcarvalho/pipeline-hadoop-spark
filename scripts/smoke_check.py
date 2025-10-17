@@ -9,7 +9,7 @@ spark.sql("CREATE DATABASE IF NOT EXISTS adventureworks")
 spark.sql("USE adventureworks")
 
 dbs = spark.sql("SHOW DATABASES").collect()
-print("[SMOKE] Databases:", [r.databaseName for r in dbs])
+print("[SMOKE] Databases:", [r.namespace for r in dbs])
 
 tables = spark.sql("SHOW TABLES IN adventureworks").collect()
 print("[SMOKE] Tables:", [(r.tableName, r.isTemporary) for r in tables])

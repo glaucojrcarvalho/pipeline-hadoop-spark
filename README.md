@@ -14,10 +14,24 @@
 - **MySQL 8.0** (source)
 - **Hadoop 3.3.x**
 - **Hive 3.1.x** (PostgreSQL metastore for this lab)
-- **Spark 3.5.x** (with Hive support)
+- **Apache Spark 4.0.1** (with Hive support)
 - **Python 3.11** for PySpark jobs
 
 > This is a **lab** setup. For production, use an external Hive metastore, configure compaction for ACID tables, tune memory/CPU, and consider Lakehouse formats.
+
+## Status (October 2025)
+
+✅ **Working Components:**
+- Docker Compose infrastructure with all services
+- MySQL to Hive data ingestion via Spark JDBC
+- Complete AdventureWorks database import (67 tables)
+- Basic Spark SQL operations on Hive tables
+- CI/CD workflows with proper image versions
+
+⚠️ **Known Limitations:**
+- SCD scripts use `MERGE INTO` statements which are not supported in Apache Spark 4.0
+- ACID table operations may require Hive-specific configuration
+- Nightly workflow may fail on SCD operations until MERGE statements are refactored
 
 ---
 
@@ -53,11 +67,13 @@ make mysql-load
 make ingest
 ```
 
-### 6) Run SCD examples
+### 6) Run SCD examples (Note: Currently limited)
 ```bash
-make scd1   # SCD Type 1 (MERGE overwrite)
-make scd2   # SCD Type 2 (history)
+make scd1   # SCD Type 1 - Currently fails due to MERGE INTO not supported in Spark 4.0
+make scd2   # SCD Type 2 - May have similar limitations
 ```
+
+> **Important:** The SCD scripts currently use `MERGE INTO` statements which are not supported in Apache Spark 4.0. The data ingestion and basic operations work perfectly, but the SCD examples need to be refactored to use alternative approaches like `INSERT OVERWRITE` or manual upsert logic.
 
 > **Tip:** This project writes to Hive managed tables in the `adventureworks` database. You can open Beeline or PySpark to explore:
 >
@@ -103,8 +119,13 @@ Environment knobs for CI:
 - `ONLY_TABLES`: a comma-separated list to ingest **only** those tables (e.g., `ONLY_TABLES=culture`). When provided, it takes precedence over `SMOKE_TABLE_LIMIT`.
 
 ### SCD
-- **Type 1**: overwrite-by-key semantics using `MERGE INTO` on Hive ACID table (`TBLPROPERTIES ('transactional'='true')`).
-- **Type 2**: `valid_from`, `valid_to`, `is_current` columns to maintain history. Simplified example.
+- **Type 1**: Originally designed for overwrite-by-key semantics using `MERGE INTO` on Hive ACID table (`TBLPROPERTIES ('transactional'='true')`). Currently not working due to Apache Spark 4.0 limitations.
+- **Type 2**: Originally designed with `valid_from`, `valid_to`, `is_current` columns to maintain history. May require refactoring for Spark 4.0 compatibility.
+
+**Note**: Future improvements should implement alternative approaches like:
+- Using `INSERT OVERWRITE` with conditional logic for SCD Type 1
+- Manual upsert operations using DataFrame APIs for SCD Type 2
+- Consider migrating to Delta Lake or Apache Iceberg for better ACID support
 
 ---
 

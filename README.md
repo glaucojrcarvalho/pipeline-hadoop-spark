@@ -42,7 +42,7 @@ Place the dump under `./data/AWBackup.sql`. Example:
 
 ```bash
 mkdir -p data
-curl -L -o data/AWBackup.sql "https://raw.githubusercontent.com/glaucojrcarvalho/pipeline-hadoop-spark/refs/heads/main/AWBackup.sql"
+curl -L -o data/AWBackup.sql "https://raw.githubusercontent.com/glaucojrcarvalho/pipeline-hadoop-spark/refs/heads/main/data/AWBackup.sql"
 ```
 
 ### 2) Environment variables

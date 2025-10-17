@@ -21,14 +21,14 @@
 
 ## Status (October 2025)
 
-✅ **Working Components:**
+**Working Components:**
 - Docker Compose infrastructure with all services
 - MySQL to Hive data ingestion via Spark JDBC
 - Complete AdventureWorks database import (67 tables)
 - Basic Spark SQL operations on Hive tables
 - CI/CD workflows with proper image versions
 
-⚠️ **Known Limitations:**
+**Known Limitations:**
 - SCD scripts use `MERGE INTO` statements which are not supported in Apache Spark 4.0
 - ACID table operations may require Hive-specific configuration
 - Nightly workflow may fail on SCD operations until MERGE statements are refactored

@@ -57,9 +57,6 @@ jobs:
           done
           echo "Sleep for Hive to settle..."; sleep 45
 
-      - name: Load MySQL dump
-        run: make mysql-load
-
       - name: Ingest limited tables (Spark JDBC)
         env:
           SMOKE_TABLE_LIMIT: "1"

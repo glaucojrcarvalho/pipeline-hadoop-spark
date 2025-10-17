@@ -20,6 +20,7 @@ spark.sql("CREATE DATABASE IF NOT EXISTS adventureworks")
 tables = (spark.read
     .format("jdbc")
     .option("url", MYSQL_URL)
+    .option("driver", "com.mysql.cj.jdbc.Driver")
     .option("dbtable", "information_schema.tables")
     .option("user", MYSQL_USER)
     .option("password", MYSQL_PASS)
@@ -54,6 +55,7 @@ for t in sorted(table_names):
     try:
         df = (spark.read.format("jdbc")
               .option("url", MYSQL_URL)
+              .option("driver", "com.mysql.cj.jdbc.Driver")
               .option("dbtable", t)
               .option("user", MYSQL_USER)
               .option("password", MYSQL_PASS)

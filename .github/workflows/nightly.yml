@@ -56,9 +56,6 @@ jobs:
           done
           echo "Sleep for Hive to settle..."; sleep 45
 
-      - name: Load MySQL dump
-        run: make mysql-load
-
       - name: Ingest target table(s) for SCD
         env:
           ONLY_TABLES: "culture"
